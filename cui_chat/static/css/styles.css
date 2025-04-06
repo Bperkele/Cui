@@ -83,7 +83,7 @@ body, html {
 }
 
 .sidebar-collapsed #toggleSidebar {
-    transform: translateX(-10px); /* Fine-tune with pixel values */
+    transform: translateX(-5px); /* Fine-tune with pixel values */
 }
 
 .sidebar-item-icon {
@@ -249,4 +249,47 @@ body, html {
 
 .message-content tr:hover {
     background-color: rgba(0,0,0,0.05);
+}
+
+/* Add to your CSS */
+#newChatBtn {
+    padding: 0.25rem 0.5rem;
+}
+
+.sidebar-collapsed #newChatBtn {
+    display: none; /* Hide in collapsed state */
+}
+
+.sidebar-header .btn-group {
+    margin-left: auto;
+}
+
+/* Adjust toggle button position when collapsed */
+.sidebar-collapsed .sidebar-header {
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.sidebar-collapsed #toggleSidebar {
+    margin: 0 auto;
+}
+
+/* Add to your existing CSS */
+.list-group-item.active {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #495057;
+}
+
+.list-group-item.active:hover {
+    background-color: #dde0e3;
+}
+
+.list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover:not(.active) {
+    background-color: #f8f9fa;
 }

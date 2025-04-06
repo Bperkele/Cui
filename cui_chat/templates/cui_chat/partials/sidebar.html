@@ -1,20 +1,26 @@
 <div class="sidebar-container">
-    <div class="sidebar h-100 border-end">
+    <div class="sidebar h-100 border-end" id="sidebar">
         <div class="d-flex flex-column h-100">
             <div class="sidebar-header p-3 border-bottom d-flex align-items-center">
                 <h5 class="mb-0 me-auto">Chats</h5>
-                <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
-                    <i class="bi bi-chevron-double-left"></i>
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-primary me-2" id="newChatBtn">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" id="toggleSidebar">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </button>
+                </div>
             </div>
             <div class="sidebar-content flex-grow-1 overflow-auto">
                 <div class="list-group list-group-flush" id="chatHistoryList">
                     {% for chat in chat_history %}
                     <a href="#" class="list-group-item list-group-item-action {% if chat.is_active %}active{% endif %}" 
                        data-chat-id="{{ chat.id }}">
-                        <span class="sidebar-item-text">{{ chat.title }}</span>
-                        <small class="sidebar-item-text text-muted">{{ chat.updated_at|date:"M d" }}</small>
-                        <i class="bi bi-chat-left d-none sidebar-item-icon"></i>
+                        <div class="d-flex justify-content-between">
+                            <span class="sidebar-item-text">{{ chat.title }}</span>
+                            <small class="sidebar-item-text text-muted">{{ chat.updated_at|date:"M d" }}</small>
+                        </div>
                     </a>
                     {% endfor %}
                 </div>
