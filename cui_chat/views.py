@@ -130,3 +130,11 @@ def get_chat_messages(request, chat_id):
             for msg in messages
         ]
     })
+
+@login_required
+def delete_chat(request, chat_id):
+    if request.method == 'POST':
+        chat = get_object_or_404(CuiChat, id=chat_id, user=request.user)
+        chat.delete()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False}, status=400)

@@ -43,11 +43,15 @@ document.getElementById('newChatBtn').addEventListener('click', async function()
         console.error('Error creating new chat:', error);
     }
 });
-
 // Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
+    const chatHistoryList = document.getElementById('chatHistoryList');
+
     // Handle chat switching
-    document.getElementById('chatHistoryList').addEventListener('click', async function(e) {
+    chatHistoryList.addEventListener('click', async function(e) {
+        // Prevent switching if the delete button was clicked
+        if (e.target.closest('.delete-chat-btn')) return;
+
         const chatItem = e.target.closest('.list-group-item');
         if (!chatItem) return;
     
@@ -92,5 +96,34 @@ document.addEventListener('DOMContentLoaded', function() {
             chatItem.classList.remove('active');
         }
     });
-    
+
+    // Handle chat deletion
+    chatHistoryList.addEventListener('click', async function(e) {
+        const deleteBtn = e.target.closest('.delete-chat-btn');
+        if (!deleteBtn) return;
+
+        e.preventDefault();
+        const chatId = deleteBtn.dataset.chatId;
+
+        if (!confirm("Are you sure you want to delete this chat?")) return;
+
+        try {
+            const response = await fetch(`/delete_chat/${chatId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
+            });
+
+            if (response.ok) {
+                // Remove the chat from the UI
+                deleteBtn.closest('.list-group-item').remove();
+            } else {
+                alert("Failed to delete chat.");
+            }
+        } catch (error) {
+            console.error("Error deleting chat:", error);
+        }
+    });
 });

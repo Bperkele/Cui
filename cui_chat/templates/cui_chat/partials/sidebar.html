@@ -15,15 +15,18 @@
             <div class="sidebar-content flex-grow-1 overflow-auto">
                 <div class="list-group list-group-flush" id="chatHistoryList">
                     {% for chat in chat_history %}
-                    <a href="#" class="list-group-item list-group-item-action {% if chat.is_active %}active{% endif %}" 
-                       data-chat-id="{{ chat.id }}">
-                        <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between list-group-item {% if chat.is_active %}active{% endif %}" 
+                         data-chat-id="{{ chat.id }}">
+                        <a href="#" class="chat-item text-decoration-none flex-grow-1">
                             <span class="sidebar-item-text">{{ chat.title }}</span>
                             <small class="sidebar-item-text text-muted">{{ chat.updated_at|date:"M d" }}</small>
-                        </div>
-                    </a>
+                        </a>
+                        <button class="btn btn-sm btn-outline-danger delete-chat-btn" data-chat-id="{{ chat.id }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                     {% endfor %}
-                </div>
+                </div>                
             </div>
         </div>
     </div>
