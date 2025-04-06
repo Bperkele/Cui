@@ -173,3 +173,80 @@ body, html {
 .drop-active .drop-overlay {
     display: flex;
 }
+/* Add to your existing CSS */
+.message-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+}
+
+.message-content th, 
+.message-content td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.message-content th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.message-content pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+}
+
+.message-content code {
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+}
+
+.message-content ul,
+.message-content ol {
+    padding-left: 2rem;
+    margin: 1rem 0;
+}
+
+.message-content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1rem;
+    color: #666;
+    margin: 1rem 0;
+}
+/* Markdown Table Styles */
+.message-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0 0 1px #dee2e6;
+    font-size: 0.9em;
+}
+
+.message-content th, 
+.message-content td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6 !important;
+    position: relative;
+    text-align: left;
+}
+
+.message-content th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+
+.message-content tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.02);
+}
+
+.message-content tr:hover {
+    background-color: rgba(0,0,0,0.05);
+}

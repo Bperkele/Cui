@@ -7,7 +7,10 @@
                 <small class="text-muted">{{ message.timestamp|date:"H:i" }}</small>
             </div>
             <div class="message-content">
-                {{ message.content|linebreaks }}
+                <script>
+                    document.currentScript.parentElement.innerHTML = 
+                        DOMPurify.sanitize(marked.parse(`{{ message.content|escapejs }}`));
+                </script>
             </div>
         </div>
         {% endfor %}
