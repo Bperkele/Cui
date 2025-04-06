@@ -1,0 +1,26 @@
+        <!-- Fixed position message box -->
+        <div class="message-box border-top">
+            <div class="input-group p-2">
+                <select class="form-select" id="modelSelect">
+                    <option value="deepseek-chat">DeepSeek Chat</option>
+                    <option value="deepseek-coder">DeepSeek Reasoner</option>
+                </select>
+            </div>
+            
+            <div class="position-relative p-2" id="dropZone">
+                <textarea class="form-control" id="messageInput" 
+                          placeholder="Type your message..." rows="3"></textarea>
+                <div class="drop-overlay">Drop files here</div>
+            </div>
+            
+            <div class="d-flex justify-content-between p-2">
+                <div class="btn-group">
+                    <button class="btn btn-outline-secondary" id="fileUploadBtn">
+                        <i class="bi bi-paperclip"></i> Attach
+                    </button>
+                </div>
+                <button class="btn btn-primary" id="sendBtn">
+                    <i class="bi bi-send"></i> Send
+                </button>
+            </div>
+        </div>

@@ -1,0 +1,36 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid h-100 d-flex wrapper">
+    <!-- Sidebar -->
+    {% include "cui_chat/partials/sidebar.html" %}
+    <!-- Main -->
+    <div class="main-content flex-grow-1 d-flex flex-column">
+        {% include "cui_chat/partials/chat_header.html" %}
+        {% include "cui_chat/partials/chat_messages.html" %}
+        {% include "cui_chat/partials/message_box.html" %}
+    </div>
+</div>
+
+
+<!-- System Prompt Modal -->
+{% include "cui_chat/partials/sys_prompt_mod.html" %}
+
+<!-- Hidden file input -->
+<input type="file" id="fileInput" style="display: none;" multiple>
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'cui_chat/static/css/styles.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'cui_chat/static/js/sidebar.js' %}"></script>
+<script src="{% static 'cui_chat/static/js/system_prompt.js' %}"></script>
+<script src="{% static 'cui_chat/static/js/file_upload.js' %}"></script>
+<script src="{% static 'cui_chat/static/js/drag_drop.js' %}"></script>
+<script src="{% static 'cui_chat/static/js/chat.js' %}"></script>
+{% endblock %}
+{% endblock %}

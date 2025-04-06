@@ -1,0 +1,15 @@
+<div class="chat-messages-container flex-grow-1">
+    <div class="chat-messages" id="chatDisplay">
+        {% for message in messages %}
+        <div class="message mb-3 p-3 rounded {{ message.role }}-message">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+                <strong class="message-role">{{ message.role|title }}</strong>
+                <small class="text-muted">{{ message.timestamp|date:"H:i" }}</small>
+            </div>
+            <div class="message-content">
+                {{ message.content|linebreaks }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
