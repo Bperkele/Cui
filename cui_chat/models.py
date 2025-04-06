@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import Truncator
 
 class CuiChat(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -14,8 +13,8 @@ class CuiChat(models.Model):
 
     def update_title(self, message_content):
         """Generate title from first user message"""
-        truncated = Truncator(message_content).chars(40)
-        self.title = f"Chat: {truncated}"
+        from django.utils.text import Truncator
+        self.title = Truncator(message_content).chars(40)
         self.save()
 
 class CuiMessage(models.Model):
@@ -30,3 +29,12 @@ class CuiMessage(models.Model):
 
     class Meta:
         ordering = ['timestamp']
+
+class CuiSystemPrompt(models.Model):
+    """Model for storing system prompts"""
+    name = models.CharField(max_length=100, unique=True)
+    value = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

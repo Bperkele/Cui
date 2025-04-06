@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import StreamingHttpResponse, JsonResponse
-from .models import CuiChat, CuiMessage
+from .models import CuiChat, CuiMessage, CuiSystemPrompt
 import json
 import dotenv
 import os
 from openai import OpenAI
+from django.views.decorators.csrf import csrf_exempt
+
 
 dotenv.load_dotenv()
 client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), base_url="https://api.deepseek.com")
@@ -48,6 +50,14 @@ def stream_chat(request):
             role='user',
             content=user_message
         )
+        # Retrieve persisted system prompt, if any, from the session
+        persisted_prompt = request.session.get('persisted_system_prompt')
+        messages = data.get('messages', [])
+        if persisted_prompt:
+            # Check if a system message is already in the conversation; if not, add it
+            if not any(m.get('role') == 'system' for m in messages):
+                messages.insert(0, {"role": "system", "content": persisted_prompt})
+        
         
         def event_stream():
             assistant_message = None
@@ -138,3 +148,69 @@ def delete_chat(request, chat_id):
         chat.delete()
         return JsonResponse({'success': True})
     return JsonResponse({'success': False}, status=400)
+
+def get_system_prompts(request):
+    """Fetch all system prompts from the database"""
+    prompts = CuiSystemPrompt.objects.all().values("id", "name", "value")
+    return JsonResponse(list(prompts), safe=False)
+
+@csrf_exempt
+def set_system_prompt(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        prompt_id = data.get('prompt_id')
+        custom_prompt = data.get('prompt_text', '').strip()
+        persist = data.get('persist', False)
+
+        final_prompt = None
+
+        if prompt_id:
+            prompt = get_object_or_404(CuiSystemPrompt, id=prompt_id)
+            final_prompt = prompt.value
+        elif custom_prompt:
+            final_prompt = custom_prompt
+        else:
+            return JsonResponse({'success': False, 'error': 'No prompt provided'}, status=400)
+
+        # Store or clear persisted prompt based on the persist flag.
+        if persist:
+            request.session['persisted_system_prompt'] = final_prompt
+        else:
+            # If not persisting, remove any stored prompt
+            request.session.pop('persisted_system_prompt', None)
+
+        return JsonResponse({'success': True, 'prompt': final_prompt})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def add_system_prompt(request):
+    """Add a new system prompt to the database."""
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = data.get('name')
+        value = data.get('value')
+
+        if name and value:
+            prompt = CuiSystemPrompt.objects.create(name=name, value=value)
+            return JsonResponse({'success': True, 'prompt': {'id': prompt.id, 'name': prompt.name, 'value': prompt.value}})
+        else:
+            return JsonResponse({'success': False, 'error': 'Name and value are required'}, status=400)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def delete_system_prompt(request):
+    """Delete a system prompt based on the provided prompt ID."""
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        prompt_id = data.get('prompt_id')
+
+        if prompt_id:
+            prompt = get_object_or_404(CuiSystemPrompt, id=prompt_id)
+            prompt.delete()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'Prompt ID is required'}, status=400)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
